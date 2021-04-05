@@ -22,7 +22,5 @@ steps:
         "--platform",
         "managed",
       ]
-    env:
-     - "PORT=8080"
 images:
   - gcr.io/$PROJECT_ID/doublee-sample-20210405
