@@ -44,7 +44,8 @@ namespace API
                         .WithOrigins(
                             "http://localhost:3000",
                             "http://localhost:8080",
-                            "35.242.156.191"
+                            "http://doublee-sample*",
+                            "http://35.242.156.191"
                          )
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials();
