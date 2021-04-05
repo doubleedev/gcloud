@@ -5,12 +5,12 @@ dispatch:
 
   # Default service serves simple hostname request.
   - url: "doublee-sample-20210405-ei3he32sea-uc.a.run.app/"
-    service: doublee-api
+    service: doublee-sample-20210405
 
   # Send all api related traffic to the tango_dev.
   - url: "*/api/*"
-    service: doublee-api
+    service: doublee-sample-20210405
   - url: "*/swagger/*"
-    service: doublee-api
+    service: doublee-sample-20210405
   - url: "*/hc"
-    service: doublee-api
+    service: doublee-sample-20210405

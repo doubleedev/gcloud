@@ -3,7 +3,7 @@ env: flex
 runtime: custom
 
 # # Define the service used
-service: doublee-api
+service: doublee-sample-20210405
 
 # This sample incurs costs to run on the App Engine flexible environment. 
 # The settings below are to reduce costs during testing and are not appropriate
