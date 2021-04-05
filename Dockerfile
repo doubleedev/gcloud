@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 # Copy the src+test
 WORKDIR /app
@@ -15,7 +15,7 @@ WORKDIR /app
 RUN dotnet test
 
 # this will be the final build
-FROM mcr.microsoft.com/dotnet/core/aspnet:5.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
 ENV ASPNETCORE_URLS=http://+:8080
