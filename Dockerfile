@@ -18,6 +18,6 @@ RUN dotnet test
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
-ENV ASPNETCORE_URLS=http://+:8080
+# ENV ASPNETCORE_URLS=http://+:8080
 COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "tango_dev.dll"]
