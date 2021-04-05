@@ -63,7 +63,7 @@ namespace API
 
             services.AddControllers();
 
-            services.AddMvc();
+            // services.AddMvc();
 
             services.AddSwaggerGen(c =>
             {
@@ -91,7 +91,7 @@ namespace API
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
-            app.UseMvc();
+            // app.UseMvc();
 
             app.UseEndpoints(endpoints =>
             {
