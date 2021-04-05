@@ -50,10 +50,10 @@ namespace API
                 });
             });
 
-            var server = "35.230.137.175";
-            var database = "kt-test";
+            var server = "35.242.156.191";
+            var database = "sample";
             var username = "sqlserver";
-            var password = "zkXyR2B8JymSNpL3";
+            var password = "sogismhI0P2aM6kl";
 
             var connString = $@"Server={server};Initial Catalog={database};Integrated Security=false;uid={username};password={password};";
 
