@@ -23,4 +23,4 @@ WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 COPY --from=build /app/out ./
-ENTRYPOINT ["dotnet", "tango_dev.dll"]
+ENTRYPOINT ["dotnet", "API.dll"]
