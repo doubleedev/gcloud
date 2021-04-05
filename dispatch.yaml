@@ -4,13 +4,13 @@ dispatch:
     service: default
 
   # Default service serves simple hostname request.
-  - url: "doublee-sample-20210405-ei3he32sea-uc.a.run.app/"
-    service: doublee-sample-20210405
+  - url: "react-with-netcore-bff.appspot.com/"
+    service: default
 
-  # Send all api related traffic to the tango_dev.
+  # Send all api related traffic to the netcore-bff.
   - url: "*/api/*"
-    service: doublee-sample-20210405
+    service: netcore-bff
   - url: "*/swagger/*"
-    service: doublee-sample-20210405
+    service: netcore-bff
   - url: "*/hc"
-    service: doublee-sample-20210405
+    service: netcore-bff

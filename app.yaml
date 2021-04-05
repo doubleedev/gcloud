@@ -1,9 +1,9 @@
 # AppEngine does not support .Net Core 3.1
-env: flex
 runtime: custom
+env: flex
 
-# # Define the service used
-service: doublee-sample-20210405
+# Define the service used
+service: netcore-bff
 
 # This sample incurs costs to run on the App Engine flexible environment. 
 # The settings below are to reduce costs during testing and are not appropriate
