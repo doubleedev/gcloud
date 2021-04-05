@@ -44,7 +44,8 @@ namespace API
                         .WithOrigins(
                             "http://localhost:3000",
                             "http://localhost:8080",
-                            "p689195055010-sckzyq@gcp-sa-cloud-sql.iam.gserviceaccount.com"
+                            "https://doublee-sample-20210405-ei3he32sea-uc.a.run.app/",
+                            "http://doublee-sample-20210405-ei3he32sea-uc.a.run.app/"
                          )
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials();
