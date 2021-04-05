@@ -6,7 +6,7 @@ WORKDIR /app
 RUN dotnet restore
 
 # build app
-WORKDIR /app/$SOURCE_FOLDER
+WORKDIR /app
 RUN dotnet publish -c Release -o out
 
 # copy tests and run
@@ -18,5 +18,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
 ENV ASPNETCORE_URLS=http://+:5000
-COPY --from=build /app/src/netcore-bff/out ./
+COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "tando-dev.dll"]
