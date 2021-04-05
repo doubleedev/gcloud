@@ -1,0 +1,16 @@
+dispatch:
+  # Default service serves the typical web resources and all static resources.
+  - url: "*/favicon.ico"
+    service: default
+
+  # Default service serves simple hostname request.
+  - url: "react-with-tango_dev.appspot.com/"
+    service: default
+
+  # Send all api related traffic to the tango_dev.
+  - url: "*/api/*"
+    service: tango_dev
+  - url: "*/swagger/*"
+    service: tango_dev
+  - url: "*/hc"
+    service: tango_dev

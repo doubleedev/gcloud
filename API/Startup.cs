@@ -53,7 +53,7 @@ namespace API
             var server = "35.230.137.175";
             var database = "kt-test";
             var username = "sqlserver";
-            var password = "298mIIhGbfBvmcBo";
+            var password = "zkXyR2B8JymSNpL3";
 
             var connString = $@"Server={server};Initial Catalog={database};Integrated Security=false;uid={username};password={password};";
 
