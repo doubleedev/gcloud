@@ -24,8 +24,14 @@ namespace API
             return Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>().UseUrls(url);
                 });
+
+            // return Host.CreateDefaultBuilder(args)
+            //     .ConfigureWebHostDefaults(webBuilder =>
+            //     {
+            //         webBuilder.UseStartup<Startup>();
+            //     });
         }
     }
 }
