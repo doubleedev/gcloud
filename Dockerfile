@@ -1,21 +1,22 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
-
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+# Copy the src+test
 WORKDIR /app
 COPY . ./
+WORKDIR /app
 RUN dotnet restore
 
-
-COPY . ./
-WORKDIR /app
-
+# build app
+WORKDIR /app/$SOURCE_FOLDER
 RUN dotnet publish -c Release -o out
 
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-alpine AS runtime
-
+# copy tests and run
 WORKDIR /app
+RUN dotnet test
 
-COPY --from=build /app/out ./
-
-
-ENTRYPOINT ["dotnet", "tango-dev.dll"]
+# this will be the final build
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+WORKDIR /app
+# GCP AppEngine requires that port 8080 is exposed
+ENV ASPNETCORE_URLS=http://+:5000
+COPY --from=build /app/src/netcore-bff/out ./
+ENTRYPOINT ["dotnet", "tando-dev.dll"]
