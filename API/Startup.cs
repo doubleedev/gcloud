@@ -43,7 +43,8 @@ namespace API
                         .WithExposedHeaders("WWW-Authenticate", "content-disposition")
                         .WithOrigins(
                             "http://localhost:3000",
-                            "http://localhost:8080"
+                            "http://localhost:8080",
+                            "35.242.156.191"
                          )
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowCredentials();
