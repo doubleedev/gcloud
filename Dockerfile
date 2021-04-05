@@ -19,5 +19,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
 ENV ASPNETCORE_URLS=http://+:8080
-COPY --from=build /app/src/netcore-bff/out ./
+COPY --from=build /app/tango-dev/out ./
 ENTRYPOINT ["dotnet", "tango-dev.dll"]
