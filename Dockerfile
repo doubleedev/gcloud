@@ -13,11 +13,10 @@ RUN dotnet publish -c Release -o out
 WORKDIR /app
 RUN dotnet test
 
-
 # this will be the final build
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 
-RUN apt-get update
+# RUN apt-get update
 
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
