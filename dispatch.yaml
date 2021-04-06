@@ -4,7 +4,7 @@ dispatch:
     service: default
 
   # Default service serves simple hostname request.
-  - url: "doublee-sample-20210405@appspot.gserviceaccount.com"
+  - url: "689195055010@cloudbuild.gserviceaccount.com"
     service: default
 
   # Send all api related traffic to the tango_dev.
