@@ -1,10 +1,10 @@
 steps:
   # build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/$PROJECT_ID/cloudrun-bff:${SHORT_SHA}", "."]
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/doublee-sample-20210405:${SHORT_SHA}", "."]
     # push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/cloudrun-bff"]
+    args: ["push", "gcr.io/$PROJECT_ID/doublee-sample-20210405"]
     # deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -12,9 +12,9 @@ steps:
         "beta",
         "run",
         "deploy",
-        "cloudrun-bff",
+        "doublee-sample-20210405",
         "--image",
-        "gcr.io/$PROJECT_ID/cloudrun-bff:${SHORT_SHA}",
+        "gcr.io/$PROJECT_ID/doublee-sample-20210405:${SHORT_SHA}",
         "--region",
         "us-central1",
         "--allow-unauthenticated",
@@ -24,4 +24,4 @@ steps:
     env:
       - "PORT=8080"
 images:
-  - gcr.io/$PROJECT_ID/cloudrun-bff
+  - gcr.io/$PROJECT_ID/doublee-sample-20210405
