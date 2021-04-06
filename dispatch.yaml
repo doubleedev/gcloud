@@ -4,13 +4,13 @@ dispatch:
     service: default
 
   # Default service serves simple hostname request.
-  - url: "doublee-sample-20210405:${SHORT_SHA}"
+  - url: "doublee-sample-20210405@appspot.gserviceaccount.com"
     service: default
 
   # Send all api related traffic to the tango_dev.
   - url: "*/api/*"
-    service: default
+    service: api
   - url: "*/swagger/*"
-    service: default
+    service: api
   - url: "*/hc"
-    service: default
+    service: api
