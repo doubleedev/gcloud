@@ -1,4 +1,10 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+
+ENV DB_HOST=127.0.0.1
+ENV DB_USER=sqlserver
+ENV DB_PASS=sogismhI0P2aM6kl
+ENV DB_NAME=sample
+
 # Copy the src+test
 WORKDIR /app
 COPY . ./
@@ -17,16 +23,12 @@ RUN dotnet test
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 
 # RUN apt-get update
-
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
 
-ENV DB_HOST=10.79.192.3
-ENV DB_USER=sqlserver
-ENV DB_PASS=sogismhI0P2aM6kl
-ENV DB_NAME=sample
+
 
 COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "API.dll"]
