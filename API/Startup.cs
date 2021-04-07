@@ -52,8 +52,9 @@ namespace API
                 });
             });
 
-            var server = "10.79.192.3";
-            var name = "doublee-sample-20210405:europe-west2:doublee-sql";
+            var server = "35.242.156.191"; // public ip
+            var name = "doublee-sample-20210405:europe-west2:doublee-sql"; // not using
+
             var database = "sample";
             var username = "sqlserver";
             var password = "sogismhI0P2aM6kl";
