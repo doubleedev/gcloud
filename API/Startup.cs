@@ -99,7 +99,6 @@ namespace API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
             app.UseDefaultFiles();
@@ -118,6 +117,8 @@ namespace API
                 endpoints.MapControllers();
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
+
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
         }
     }
 
