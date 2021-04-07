@@ -74,7 +74,7 @@ namespace ORMBase
                     cmd.CommandTimeout = 660;
                     using (var reader = cmd.ExecuteReader())
                         returnList = reader.MapDataToBusinessEntityCollection<T>();
-                    
+
                 }
                 conn.Close();
             }
@@ -166,7 +166,7 @@ namespace ORMBase
                     }
                     catch (Exception e)
                     {
-                        Log($"SQL Get All Error: {e.Message}", LogLevel.Error, "Sql",e);
+                        Log($"SQL Get All Error: {e.Message}", LogLevel.Error, "Sql", e);
                         throw;
                     }
 
@@ -183,7 +183,10 @@ namespace ORMBase
             var sqlStatment = baseObject.SqlSelect(false);
             var returnList = new List<T>();
             Log($"Executing Sql {sqlStatment}", LogLevel.Information, "Sql");
-            using (var conn = new SqlConnection(_Configuration.GetConnectionString(baseObject.GetConnectionString())))
+            var connString = _Configuration.GetConnectionString(baseObject.GetConnectionString());
+            Log($"Connection String {connString}", LogLevel.Information, "Sql");
+
+            using (var conn = new SqlConnection(connString))
             {
                 int tryCount = 0;
                 while (tryCount < 3 && conn.State != ConnectionState.Open)
@@ -202,10 +205,10 @@ namespace ORMBase
                     tryCount = 100;
                 }
                 using (var cmd = new SqlCommand(sqlStatment, conn))
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            returnList = reader.MapDataToBusinessEntityCollection<T>();
-                        }
+                using (var reader = cmd.ExecuteReader())
+                {
+                    returnList = reader.MapDataToBusinessEntityCollection<T>();
+                }
                 conn.Close();
             }
 
@@ -226,7 +229,7 @@ namespace ORMBase
             var baseObject = Activator.CreateInstance<T>();
             sb.AppendLine(baseObject.SqlSelect(false));
 
-           // var exp = ((LambdaExpression)where).Body;
+            // var exp = ((LambdaExpression)where).Body;
             _ClauseBuilder = new StringBuilder();
             Process(where);
 
@@ -256,18 +259,18 @@ namespace ORMBase
                         tryCount = 100;
                     }
                     using (var cmd = new SqlCommand(sb.ToString(), conn))
-                        using (var reader = cmd.ExecuteReader())
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                baseObject.Map(reader);
-                                break;
-                            }
+                            baseObject.Map(reader);
+                            break;
                         }
+                    }
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Get Single Error: {e.Message}", LogLevel.Information, "Sql",e);
+                    Log($"SQL Get Single Error: {e.Message}", LogLevel.Information, "Sql", e);
                 }
                 conn.Close();
             }
@@ -317,7 +320,7 @@ namespace ORMBase
             Log($"Executing Sql {sb.ToString()}", LogLevel.Information, "Sql");
 
             var returnList = new List<T>();
-            Log(sb.ToString(),LogLevel.Debug,"Sql");
+            Log(sb.ToString(), LogLevel.Debug, "Sql");
 
             using (var conn = new SqlConnection(_Configuration.GetConnectionString(baseObject.GetConnectionString())))
             {
@@ -345,7 +348,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Get Where Error: {e.Message}", LogLevel.Information, "Sql",e);                    
+                    Log($"SQL Get Where Error: {e.Message}", LogLevel.Information, "Sql", e);
                 }
                 conn.Close();
             }
@@ -401,7 +404,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Count Error: {e.Message}", LogLevel.Error, "Sql",e);
+                    Log($"SQL Count Error: {e.Message}", LogLevel.Error, "Sql", e);
                 }
                 conn.Close();
             }
@@ -435,7 +438,7 @@ namespace ORMBase
                 }
                 catch (SqlException e)
                 {
-                    Log($"{e.Message} {e.StackTrace}", LogLevel.Error, "sql",e);
+                    Log($"{e.Message} {e.StackTrace}", LogLevel.Error, "sql", e);
                     throw;
                 }
                 finally
@@ -498,7 +501,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Insert Error: {e.Message}", LogLevel.Information, "Sql",e);
+                    Log($"SQL Insert Error: {e.Message}", LogLevel.Information, "Sql", e);
                 }
                 conn.Close();
             }
@@ -548,7 +551,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Update Error: {e.Message}", LogLevel.Error, "Sql",e);
+                    Log($"SQL Update Error: {e.Message}", LogLevel.Error, "Sql", e);
                 }
                 conn.Close();
             }
@@ -598,7 +601,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Delete Error: {e.Message}", LogLevel.Error, "Sql",e);
+                    Log($"SQL Delete Error: {e.Message}", LogLevel.Error, "Sql", e);
                 }
                 conn.Close();
             }
@@ -634,7 +637,7 @@ namespace ORMBase
                 }
                 catch (Exception e)
                 {
-                    Log($"SQL Truncate Error: {e.Message}", LogLevel.Information, "Sql",e);
+                    Log($"SQL Truncate Error: {e.Message}", LogLevel.Information, "Sql", e);
                 }
 
                 conn.Close();
