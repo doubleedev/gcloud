@@ -165,20 +165,35 @@ namespace API
             // [START cloud_sql_sqlserver_dotnet_ado_connection_tcp]
             // Equivalent connection string:
             // "User Id=<DB_USER>;Password=<DB_PASS>;Server=<DB_HOST>;Database=<DB_NAME>;"
-            Console.WriteLine("create table");
-            var aSource = Environment.GetEnvironmentVariable("DB_HOST");
+
+            //var aSource = Environment.GetEnvironmentVariable("DB_HOST");
             Console.WriteLine("DB_HOST", aSource);
+
+            // var connectionString = new SqlConnectionStringBuilder()
+            // {
+            //     // Remember - storing secrets in plain text is potentially unsafe. Consider using
+            //     // something like https://cloud.google.com/secret-manager/docs/overview to help keep
+            //     // secrets secret.
+            //     DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+            //     // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
+            //     UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
+            //     Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
+            //     InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
+
+            //     // The Cloud SQL proxy provides encryption between the proxy and instance
+            //     Encrypt = false,
+            // };
 
             var connectionString = new SqlConnectionStringBuilder()
             {
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+                DataSource = "127.0.0.1",     // e.g. '127.0.0.1'
                 // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
-                Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
-                InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
+                UserID = "sqlserver",         // e.g. 'my-db-user'
+                Password = "sogismhI0P2aM6kl",       // e.g. 'my-db-password'
+                InitialCatalog = "sample", // e.g. 'my-database'
 
                 // The Cloud SQL proxy provides encryption between the proxy and instance
                 Encrypt = false,
