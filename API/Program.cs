@@ -73,11 +73,11 @@ namespace API
         public static IWebHostBuilder UsePortEnvironmentVariable(
             this IWebHostBuilder builder)
         {
-            string port = Environment.GetEnvironmentVariable("PORT");
-            if (!string.IsNullOrEmpty(port))
-            {
-                builder.UseUrls($"http://127.0.0.1:{port}");
-            }
+            // string port = Environment.GetEnvironmentVariable("PORT");
+            // if (!string.IsNullOrEmpty(port))
+            // {
+            //     builder.UseUrls($"http://127.0.0.1:{port}");
+            // }
             return builder;
         }
     }
