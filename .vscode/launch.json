@@ -20,7 +20,11 @@
                 "pattern": "\\\\bNow listening on:\\\\s+(https?://\\\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DB_HOST": "35.242.156.191",
+                "DB_USER": "sqlserver",
+                "DB_PASS": "sogismhI0P2aM6kl",
+                "DB_NAME": "sample"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
