@@ -119,7 +119,18 @@ namespace API
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
 
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+            // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+
+            app.UseSwagger(c =>
+             {
+                 c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
+             });
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "APIv1");
+                c.RoutePrefix = "api/swagger";
+            });
         }
     }
 
