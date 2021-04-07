@@ -19,9 +19,17 @@ namespace API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostEnvironment env)
         {
-            Configuration = configuration;
+            //Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables();
+
+            builder.AddEnvironmentVariables("SQLAZURECONNSTR_");
+
+            Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -60,9 +68,15 @@ namespace API
             // var username = "sqlserver";
             // var password = "sogismhI0P2aM6kl";
 
-            // var connectionString = $@"Server={server};Initial Catalog={database};Integrated Security=false;uid={username};password={password};";
+            // var connString = $@"Server={server};Initial Catalog={database};Integrated Security=false;uid={username};password={password};";
 
-            var connectionString = GetSqlServerConnectionString();
+            var host = Configuration["DB_HOST"];
+            var usr = Configuration["DB_USER"];
+            var pwd = Configuration["DB_PASS"];
+            var db = Configuration["DB_NAME"];
+
+            var connectionString = GetSqlServerConnectionString(host, usr, pwd, db);
+
             var connString = connectionString.ConnectionString;
 
             Configuration["ConnectionStrings:DefaultConnection"] = connString;
@@ -106,21 +120,28 @@ namespace API
             });
         }
 
-        public static SqlConnectionStringBuilder GetSqlServerConnectionString()
+        public static SqlConnectionStringBuilder GetSqlServerConnectionString(string host, string usr, string pwd, string db)
         {
             // [START cloud_sql_sqlserver_dotnet_ado_connection_tcp]
             // Equivalent connection string:
             // "User Id=<DB_USER>;Password=<DB_PASS>;Server=<DB_HOST>;Database=<DB_NAME>;"
+
             var connectionString = new SqlConnectionStringBuilder()
             {
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+                DataSource = host,     // e.g. '127.0.0.1'
                 // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
-                Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
-                InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
+                UserID = usr,         // e.g. 'my-db-user'
+                Password = pwd,       // e.g. 'my-db-password'
+                InitialCatalog = db, // e.g. 'my-database'
+
+                // DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+                // // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
+                // UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
+                // Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
+                // InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
 
                 // The Cloud SQL proxy provides encryption between the proxy and instance
                 Encrypt = false,
