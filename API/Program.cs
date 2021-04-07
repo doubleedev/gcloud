@@ -76,7 +76,7 @@ namespace API
             string port = Environment.GetEnvironmentVariable("PORT");
             if (!string.IsNullOrEmpty(port))
             {
-                builder.UseUrls($"http://127.0.0.0:{port}");
+                builder.UseUrls($"http://127.0.0.1:{port}");
             }
             return builder;
         }
