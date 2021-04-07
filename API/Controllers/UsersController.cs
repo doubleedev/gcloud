@@ -22,5 +22,11 @@ namespace API.Controllers
             var users = _UserRepository.GetAll();
             return Ok(users);
         }
+
+        [HttpGet("getsomething")]
+        public ActionResult<string> GetSomethiong()
+        {
+            return "Just returning to test something";
+        }
     }
 }

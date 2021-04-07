@@ -21,6 +21,25 @@ export const fetchUsersFail = (error) => ({
     error
 })
 
+export const getSomethingStart = () => ({
+    type: actionTypes.GET_SOMETHING_START,
+    loading: true,
+    error: null
+})
+
+export const getSomethingSuccess = something => ({
+    type: actionTypes.GET_SOMETHING_SUCCESS,
+    loading: false,
+    something,
+    error: null
+})
+
+export const getSomethingFail = (error) => ({
+    type: actionTypes.GET_SOMETHING_FAIL,
+    something: '',
+    loading: false,
+    error
+})
 
 export const fetchUsers = () => {
 
@@ -42,6 +61,23 @@ export const fetchUsers = () => {
             })
             .catch((err) => {
                 dispatch(fetchUsersFail(err))
+            })
+    }
+}
+
+export const getSomething = () => {
+
+    const url = '/users/getsomething';
+
+    return (dispatch) => {
+        dispatch(getSomethingStart())
+        axios
+            .get(url)
+            .then((res) => {
+                dispatch(getSomethingSuccess(res.data))
+            })
+            .catch((err) => {
+                dispatch(getSomethingFail(err))
             })
     }
 }

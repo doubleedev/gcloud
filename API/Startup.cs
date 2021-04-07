@@ -31,7 +31,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(sp => StartupExtensions.GetSqlServerConnectionString());
+            // services.AddSingleton(sp => StartupExtensions.GetSqlServerConnectionString());
             services.AddSingleton((IConfigurationRoot)Configuration);
 
             services.AddTransient<IGeneralDataRepository, GeneralDataRepository>();
@@ -50,6 +50,7 @@ namespace API
                             "http://localhost:5000",
                             "https://localhost:5001",
                             "http://localhost:8080",
+                            "http://127.0.0.1:8080",
                             "https://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*",
                             "http://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*"
                          )
@@ -88,7 +89,6 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
-
         }
 
 
@@ -123,42 +123,42 @@ namespace API
 
     static class StartupExtensions
     {
-        public static void OpenWithRetry(this DbConnection connection) =>
-            // [START cloud_sql_sqlserver_dotnet_ado_backoff]
-            Policy
-                .Handle<SqlException>()
-                .WaitAndRetry(new[]
-                {
-                    TimeSpan.FromSeconds(1),
-                    TimeSpan.FromSeconds(2),
-                    TimeSpan.FromSeconds(5)
-                })
-                .Execute(() => connection.Open());
-        // [END cloud_sql_sqlserver_dotnet_ado_backoff]
+        // public static void OpenWithRetry(this DbConnection connection) =>
+        //     // [START cloud_sql_sqlserver_dotnet_ado_backoff]
+        //     Policy
+        //         .Handle<SqlException>()
+        //         .WaitAndRetry(new[]
+        //         {
+        //             TimeSpan.FromSeconds(1),
+        //             TimeSpan.FromSeconds(2),
+        //             TimeSpan.FromSeconds(5)
+        //         })
+        //         .Execute(() => connection.Open());
+        // // [END cloud_sql_sqlserver_dotnet_ado_backoff]
 
-        public static void InitializeDatabase()
-        {
-            var connectionString = GetSqlServerConnectionString();
-            Console.WriteLine("create table");
+        // public static void InitializeDatabase()
+        // {
+        //     var connectionString = GetSqlServerConnectionString();
+        //     Console.WriteLine("create table");
 
-            using (DbConnection connection = new SqlConnection(connectionString.ConnectionString))
-            {
-                connection.OpenWithRetry();
-                using (var createTableCommand = connection.CreateCommand())
-                {
-                    // Create the 'votes' table if it does not already exist.
-                    createTableCommand.CommandText = @"
-                    IF OBJECT_ID(N'dbo.votes', N'U') IS NULL
-                    BEGIN
-                        CREATE TABLE dbo.votes(
-                        vote_id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
-                        time_cast datetime NOT NULL,
-                        candidate CHAR(6) NOT NULL)
-                    END";
-                    createTableCommand.ExecuteNonQuery();
-                }
-            }
-        }
+        //     using (DbConnection connection = new SqlConnection(connectionString.ConnectionString))
+        //     {
+        //         connection.OpenWithRetry();
+        //         using (var createTableCommand = connection.CreateCommand())
+        //         {
+        //             // Create the 'votes' table if it does not already exist.
+        //             createTableCommand.CommandText = @"
+        //             IF OBJECT_ID(N'dbo.votes', N'U') IS NULL
+        //             BEGIN
+        //                 CREATE TABLE dbo.votes(
+        //                 vote_id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+        //                 time_cast datetime NOT NULL,
+        //                 candidate CHAR(6) NOT NULL)
+        //             END";
+        //             createTableCommand.ExecuteNonQuery();
+        //         }
+        //     }
+        // }
 
         public static SqlConnectionStringBuilder GetSqlServerConnectionString()
         {
