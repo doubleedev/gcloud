@@ -131,17 +131,17 @@ namespace API
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                DataSource = host,     // e.g. '127.0.0.1'
-                // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                UserID = usr,         // e.g. 'my-db-user'
-                Password = pwd,       // e.g. 'my-db-password'
-                InitialCatalog = db, // e.g. 'my-database'
-
-                // DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+                // DataSource = host,     // e.g. '127.0.0.1'
                 // // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                // UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
-                // Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
-                // InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
+                // UserID = usr,         // e.g. 'my-db-user'
+                // Password = pwd,       // e.g. 'my-db-password'
+                // InitialCatalog = db, // e.g. 'my-database'
+
+                DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
+                // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
+                UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
+                Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
+                InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
 
                 // The Cloud SQL proxy provides encryption between the proxy and instance
                 Encrypt = false,
