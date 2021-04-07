@@ -167,7 +167,7 @@ namespace API
             // "User Id=<DB_USER>;Password=<DB_PASS>;Server=<DB_HOST>;Database=<DB_NAME>;"
 
             //var aSource = Environment.GetEnvironmentVariable("DB_HOST");
-            Console.WriteLine("DB_HOST", aSource);
+            //Console.WriteLine("DB_HOST", aSource);
 
             // var connectionString = new SqlConnectionStringBuilder()
             // {
