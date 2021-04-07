@@ -22,5 +22,11 @@ WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://+:8080
+
+ENV DB_HOST=127.0.0.1
+ENV DB_USER=sqlserver
+ENV DB_PASS=sogismhI0P2aM6kl
+ENV DB_NAME=sample
+
 COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "API.dll"]
