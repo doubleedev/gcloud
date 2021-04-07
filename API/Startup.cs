@@ -51,6 +51,7 @@ namespace API
                             "https://localhost:5001",
                             "http://localhost:8080",
                             "http://127.0.0.1:8080",
+                            "http://127.0.0.1:1433",
                             "https://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*",
                             "http://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*"
                          )
@@ -190,7 +191,7 @@ namespace API
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                DataSource = "127.0.0.1:8080",     // e.g. '127.0.0.1'
+                DataSource = "127.0.0.1:1433",     // e.g. '127.0.0.1'
                 // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
                 UserID = "sqlserver",         // e.g. 'my-db-user'
                 Password = "sogismhI0P2aM6kl",       // e.g. 'my-db-password'
