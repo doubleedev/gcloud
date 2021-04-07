@@ -16,8 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Polly;
-using System.IO;
-using System.Reflection;
 
 namespace API
 {
@@ -85,22 +83,11 @@ namespace API
 
             services.AddControllers();
 
+            // services.AddMvc();
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Zip Declare API",
-                    Version = "v1",
-                    Description = "Information relating the available API in Zip Declare"
-                });
-
-                // XML docs
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-
-                // Annotations
-                c.EnableAnnotations();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
         }
 
@@ -131,17 +118,7 @@ namespace API
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
 
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "api/{documentName}/swagger.json";
-            });
-
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-            // app.UseSwaggerUI(c =>
-            // {
-            //     c.SwaggerEndpoint("/api/v1/swagger.json", "API v1");
-            //     c.RoutePrefix = "api";
-            // });
         }
     }
 
