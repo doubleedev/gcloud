@@ -35,7 +35,7 @@ namespace API
         {
             BuildWebHost(args).Build().Run();
             // Create Database table if it does not exist.
-            //StartupExtensions.InitializeDatabase();
+            StartupExtensions.InitializeDatabase();
         }
 
         public static IWebHostBuilder BuildWebHost(string[] args)
@@ -76,7 +76,7 @@ namespace API
             string port = Environment.GetEnvironmentVariable("PORT");
             if (!string.IsNullOrEmpty(port))
             {
-                builder.UseUrls($"http://0.0.0.0:{port}");
+                builder.UseUrls($"http://127.0.0.0:{port}");
             }
             return builder;
         }

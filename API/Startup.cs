@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,29 +15,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Polly;
 
 namespace API
 {
     public class Startup
     {
-        public Startup(IHostEnvironment env)
-        {
-            //Configuration = configuration;
-            var builder = new ConfigurationBuilder()
-               .SetBasePath(env.ContentRootPath)
-               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-               .AddEnvironmentVariables();
-
-            builder.AddEnvironmentVariables("SQLAZURECONNSTR_");
-
-            Configuration = builder.Build();
-        }
-
         public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(sp => StartupExtensions.GetSqlServerConnectionString());
             services.AddSingleton((IConfigurationRoot)Configuration);
 
             services.AddTransient<IGeneralDataRepository, GeneralDataRepository>();
@@ -52,6 +47,8 @@ namespace API
                         .WithExposedHeaders("WWW-Authenticate", "content-disposition")
                         .WithOrigins(
                             "http://localhost:3000",
+                            "http://localhost:5000",
+                            "https://localhost:5001",
                             "http://localhost:8080",
                             "https://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*",
                             "http://doublee-sample-20210405-ei3he32sea-uc.a.run.app/*"
@@ -70,12 +67,14 @@ namespace API
 
             // var connString = $@"Server={server};Initial Catalog={database};Integrated Security=false;uid={username};password={password};";
 
-            var host = Configuration["DB_HOST"];
-            var usr = Configuration["DB_USER"];
-            var pwd = Configuration["DB_PASS"];
-            var db = Configuration["DB_NAME"];
+            // // this was just to test passing in from the configuration file. appsettings.json
+            // var host = Configuration["DB_HOST"];
+            // var usr = Configuration["DB_USER"];
+            // var pwd = Configuration["DB_PASS"];
+            // var db = Configuration["DB_NAME"];
 
-            var connectionString = GetSqlServerConnectionString(host, usr, pwd, db);
+            // params should not be needed when the enviroment variables are working. if the are needed at all.
+            var connectionString = StartupExtensions.GetSqlServerConnectionString();
 
             var connString = connectionString.ConnectionString;
 
@@ -91,6 +90,7 @@ namespace API
             });
 
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -119,24 +119,61 @@ namespace API
                 endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
+    }
 
-        public static SqlConnectionStringBuilder GetSqlServerConnectionString(string host, string usr, string pwd, string db)
+    static class StartupExtensions
+    {
+        public static void OpenWithRetry(this DbConnection connection) =>
+            // [START cloud_sql_sqlserver_dotnet_ado_backoff]
+            Policy
+                .Handle<SqlException>()
+                .WaitAndRetry(new[]
+                {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(5)
+                })
+                .Execute(() => connection.Open());
+        // [END cloud_sql_sqlserver_dotnet_ado_backoff]
+
+        public static void InitializeDatabase()
+        {
+            var connectionString = GetSqlServerConnectionString();
+            Console.WriteLine("create table");
+
+            using (DbConnection connection = new SqlConnection(connectionString.ConnectionString))
+            {
+                connection.OpenWithRetry();
+                using (var createTableCommand = connection.CreateCommand())
+                {
+                    // Create the 'votes' table if it does not already exist.
+                    createTableCommand.CommandText = @"
+                    IF OBJECT_ID(N'dbo.votes', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.votes(
+                        vote_id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+                        time_cast datetime NOT NULL,
+                        candidate CHAR(6) NOT NULL)
+                    END";
+                    createTableCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static SqlConnectionStringBuilder GetSqlServerConnectionString()
         {
             // [START cloud_sql_sqlserver_dotnet_ado_connection_tcp]
             // Equivalent connection string:
             // "User Id=<DB_USER>;Password=<DB_PASS>;Server=<DB_HOST>;Database=<DB_NAME>;"
+            Console.WriteLine("create table");
+            var aSource = Environment.GetEnvironmentVariable("DB_HOST");
+            Console.WriteLine("DB_HOST", aSource);
 
             var connectionString = new SqlConnectionStringBuilder()
             {
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                // DataSource = host,     // e.g. '127.0.0.1'
-                // // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                // UserID = usr,         // e.g. 'my-db-user'
-                // Password = pwd,       // e.g. 'my-db-password'
-                // InitialCatalog = db, // e.g. 'my-database'
-
                 DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
                 // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
                 UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
