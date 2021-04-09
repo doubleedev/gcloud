@@ -1,10 +1,10 @@
 steps:
   # build the container image
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/$PROJECT_ID/doublee-sample-20210405:${SHORT_SHA}", "."]
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/doublee-sample-20210409:${SHORT_SHA}", "."]
     # push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/doublee-sample-20210405"]
+    args: ["push", "gcr.io/$PROJECT_ID/doublee-sample-20210409"]
     # deploy container image to Cloud Run
   - name: "gcr.io/cloud-builders/gcloud"
     args:
@@ -12,15 +12,17 @@ steps:
         "beta",
         "run",
         "deploy",
-        "doublee-sample-20210405",
+        "doublee-sample-20210409",
         "--image",
-        "gcr.io/$PROJECT_ID/doublee-sample-20210405:${SHORT_SHA}",
+        "gcr.io/$PROJECT_ID/doublee-sample-20210409:${SHORT_SHA}",
         "--add-cloudsql-instances",
         "doublee-sql",
         --set-env-vars,
-        "INSTANCE_CONNECTION_NAME=doublee-sample-20210405:europe-west2:doublee-sql",
+        "INSTANCE_CONNECTION_NAME=doublee-sample-20210409:europe-west2:doublee-sql",
         --set-env-vars,
         "DB_USER=sqlserver",
+        --set-env-vars,
+        "DB_HOST=cloudsql",
         --set-env-vars,
         "DB_PASS=sogismhI0P2aM6kl",
         --set-env-vars,
@@ -34,4 +36,4 @@ steps:
     env:
       - "PORT=8080"
 images:
-  - gcr.io/$PROJECT_ID/doublee-sample-20210405
+  - gcr.io/$PROJECT_ID/doublee-sample-20210409
