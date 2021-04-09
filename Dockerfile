@@ -20,10 +20,10 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 # RUN apt-get update
 WORKDIR /app
 # GCP AppEngine requires that port 8080 is exposed
-# EXPOSE 8080
+EXPOSE 8080
 # ENV ASPNETCORE_URLS=http://+:8080
 ENV PORT 8080
-ENV HOST 0.0.0.0
+ENV HOST 127.0.0.1
 
 COPY --from=build /app/out ./
 ENTRYPOINT ["dotnet", "API.dll"]
