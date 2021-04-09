@@ -15,7 +15,7 @@
       "launchUrl": "/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DB_HOST": "35.246.15.104",
+        "DB_HOST": "127.0.0.1",
         "DB_USER": "sqlserver",
         "DB_PASS": "JMlK6suA14kqitas",
         "DB_NAME": "doublee-db",
