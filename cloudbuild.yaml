@@ -35,6 +35,5 @@ steps:
       ]
     env:
       - "PORT=8080"
-      
 images:
   - gcr.io/$PROJECT_ID/doublee-sample-sql
