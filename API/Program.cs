@@ -33,9 +33,9 @@ namespace API
 
         public static void Main(string[] args)
         {
+            //StartupExtensions.InitializeDatabase();
             BuildWebHost(args).Build().Run();
             // Create Database table if it does not exist.
-            // StartupExtensions.InitializeDatabase();
         }
 
         public static IWebHostBuilder BuildWebHost(string[] args)
