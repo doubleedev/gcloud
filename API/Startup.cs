@@ -31,7 +31,7 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddSingleton(sp => StartupExtensions.GetSqlServerConnectionString());
+            services.AddSingleton(sp => StartupExtensions.GetSqlServerConnectionString());
             services.AddSingleton((IConfigurationRoot)Configuration);
 
             services.AddTransient<IGeneralDataRepository, GeneralDataRepository>();
@@ -136,77 +136,57 @@ namespace API
 
     static class StartupExtensions
     {
-        // public static void OpenWithRetry(this DbConnection connection) =>
-        //     // [START cloud_sql_sqlserver_dotnet_ado_backoff]
-        //     Policy
-        //         .Handle<SqlException>()
-        //         .WaitAndRetry(new[]
-        //         {
-        //             TimeSpan.FromSeconds(1),
-        //             TimeSpan.FromSeconds(2),
-        //             TimeSpan.FromSeconds(5)
-        //         })
-        //         .Execute(() => connection.Open());
-        // // [END cloud_sql_sqlserver_dotnet_ado_backoff]
+        public static void OpenWithRetry(this DbConnection connection) =>
+            // [START cloud_sql_sqlserver_dotnet_ado_backoff]
+            Policy
+                .Handle<SqlException>()
+                .WaitAndRetry(new[]
+                {
+                    TimeSpan.FromSeconds(1),
+                    TimeSpan.FromSeconds(2),
+                    TimeSpan.FromSeconds(5)
+                })
+                .Execute(() => connection.Open());
+        // [END cloud_sql_sqlserver_dotnet_ado_backoff]
 
-        // public static void InitializeDatabase()
-        // {
-        //     var connectionString = GetSqlServerConnectionString();
-        //     Console.WriteLine("create table");
-
-        //     using (DbConnection connection = new SqlConnection(connectionString.ConnectionString))
-        //     {
-        //         connection.OpenWithRetry();
-        //         using (var createTableCommand = connection.CreateCommand())
-        //         {
-        //             // Create the 'votes' table if it does not already exist.
-        //             createTableCommand.CommandText = @"
-        //             IF OBJECT_ID(N'dbo.votes', N'U') IS NULL
-        //             BEGIN
-        //                 CREATE TABLE dbo.votes(
-        //                 vote_id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
-        //                 time_cast datetime NOT NULL,
-        //                 candidate CHAR(6) NOT NULL)
-        //             END";
-        //             createTableCommand.ExecuteNonQuery();
-        //         }
-        //     }
-        // }
-
+        public static void InitializeDatabase()
+        {
+            var connectionString = GetSqlServerConnectionString();
+            using (DbConnection connection = new SqlConnection(connectionString.ConnectionString))
+            {
+                connection.OpenWithRetry();
+                using (var createTableCommand = connection.CreateCommand())
+                {
+                    // Create the 'votes' table if it does not already exist.
+                    createTableCommand.CommandText = @"
+                    IF OBJECT_ID(N'dbo.votes', N'U') IS NULL
+                    BEGIN
+                        CREATE TABLE dbo.votes(
+                        vote_id INT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
+                        time_cast datetime NOT NULL,
+                        candidate CHAR(6) NOT NULL)
+                    END";
+                    createTableCommand.ExecuteNonQuery();
+                }
+            }
+        }
         public static SqlConnectionStringBuilder GetSqlServerConnectionString()
         {
             // [START cloud_sql_sqlserver_dotnet_ado_connection_tcp]
             // Equivalent connection string:
             // "User Id=<DB_USER>;Password=<DB_PASS>;Server=<DB_HOST>;Database=<DB_NAME>;"
-
-            //var aSource = Environment.GetEnvironmentVariable("DB_HOST");
-            //Console.WriteLine("DB_HOST", aSource);
-
-            // var connectionString = new SqlConnectionStringBuilder()
-            // {
-            //     // Remember - storing secrets in plain text is potentially unsafe. Consider using
-            //     // something like https://cloud.google.com/secret-manager/docs/overview to help keep
-            //     // secrets secret.
-            //     DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
-            //     // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-            //     UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
-            //     Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
-            //     InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
-
-            //     // The Cloud SQL proxy provides encryption between the proxy and instance
-            //     Encrypt = false,
-            // };
+            var aSource = Environment.GetEnvironmentVariable("DB_HOST");
 
             var connectionString = new SqlConnectionStringBuilder()
             {
                 // Remember - storing secrets in plain text is potentially unsafe. Consider using
                 // something like https://cloud.google.com/secret-manager/docs/overview to help keep
                 // secrets secret.
-                DataSource = "127.0.0.1:1433",     // e.g. '127.0.0.1'
+                DataSource = Environment.GetEnvironmentVariable("DB_HOST"),     // e.g. '127.0.0.1'
                 // Set Host to 'cloudsql' when deploying to App Engine Flexible environment
-                UserID = "sqlserver",         // e.g. 'my-db-user'
-                Password = "sogismhI0P2aM6kl",       // e.g. 'my-db-password'
-                InitialCatalog = "sample", // e.g. 'my-database'
+                UserID = Environment.GetEnvironmentVariable("DB_USER"),         // e.g. 'my-db-user'
+                Password = Environment.GetEnvironmentVariable("DB_PASS"),       // e.g. 'my-db-password'
+                InitialCatalog = Environment.GetEnvironmentVariable("DB_NAME"), // e.g. 'my-database'
 
                 // The Cloud SQL proxy provides encryption between the proxy and instance
                 Encrypt = false,
