@@ -15,10 +15,11 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_HOST": "35.246.15.104",
         "DB_USER": "sqlserver",
-        "DB_PASS": "sogismhI0P2aM6kl",
-        "DB_NAME": "sample",
-        "INSTANCE_CONNECTION_NAME": "doublee-sample-20210405:europe-west2:doublee-mysql"
+        "DB_PASS": "JMlK6suA14kqitas",
+        "DB_NAME": "doublee-db",
+        "INSTANCE_CONNECTION_NAME": "doublee-sample-20210405:europe-west2:doublee-sql-server"
       }
     },
     "API": {
@@ -29,10 +30,11 @@
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_HOST": "35.246.15.104",
         "DB_USER": "sqlserver",
-        "DB_PASS": "sogismhI0P2aM6kl",
-        "DB_NAME": "sample",
-        "INSTANCE_CONNECTION_NAME": "doublee-sample-20210405:europe-west2:doublee-mysql"
+        "DB_PASS": "JMlK6suA14kqitas",
+        "DB_NAME": "doublee-db",
+        "INSTANCE_CONNECTION_NAME": "doublee-sample-20210405:europe-west2:doublee-sql-server"
       }
     }
   }
