@@ -20,7 +20,7 @@ steps:
         --set-env-vars,
         "INSTANCE_CONNECTION_NAME=doublee-sample-20210405:europe-west2:doublee-sql-server",
         --set-env-vars,
-        "DB_HOST=127.0.0.1",
+        "DB_HOST=10.79.192.5",
         --set-env-vars,
         "DB_USER=sqlserver",
         --set-env-vars,
